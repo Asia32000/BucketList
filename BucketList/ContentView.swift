@@ -50,13 +50,18 @@ struct ContentView: View {
                             viewModel.addLocation()
                         } label: {
                             Image(systemName: "plus")
+                                .padding()
+                                .background(.black.opacity(0.75))
+                                .foregroundColor(.white)
+                                .font(.title)
+                                .clipShape(Circle())
+                                .padding(.trailing)
+                                .alert("Authentication failed!", isPresented: $viewModel.authFailed) {
+                                    Button("OK") { }
+                                } message: {
+                                    Text(viewModel.errorMEssage)
+                                }
                         }
-                        .padding()
-                        .background(.black.opacity(0.75))
-                        .foregroundColor(.white)
-                        .font(.title)
-                        .clipShape(Circle())
-                        .padding(.trailing)
                     }
                 }
                 .sheet(item: $viewModel.selectedLocation) { place in
@@ -76,47 +81,6 @@ struct ContentView: View {
             
         }
     }
-    
-    
-    
-    func getDocumentsDirectory() -> URL {
-        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-        return paths[0]
-    }
-    
-    //    @ViewBuilder
-    //    var autheticationView: some View {
-    //        VStack {
-    //            if isUnlocked {
-    //                Text("Unlocked")
-    //            } else {
-    //                Text("Locked")
-    //            }
-    //        }
-    //        .onAppear(perform: authenticate)
-    //    }
-    
-    
-    @ViewBuilder
-    var saveString: some View {
-        VStack {
-            Text("Hello, world!")
-                .onTapGesture {
-                    let str = "Test string"
-                    let url = getDocumentsDirectory().appendingPathComponent("message.txt")
-                    
-                    do {
-                        try str.write(to: url, atomically: true, encoding: .utf8)
-                        
-                        let input = try String(contentsOf: url)
-                        print(input)
-                    } catch {
-                        print(error.localizedDescription)
-                    }
-                }
-        }
-    }
-    
 }
 
 struct ContentView_Previews: PreviewProvider {
